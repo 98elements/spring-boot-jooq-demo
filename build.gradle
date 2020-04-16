@@ -1,0 +1,91 @@
+//(1)
+plugins {
+    id 'org.springframework.boot' version "2.2.5.RELEASE"
+    id 'nu.studer.jooq' version '4.1'
+    id "org.flywaydb.flyway" version "6.3.0"
+}
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
+group 'com._98elements'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_13
+
+repositories {
+    mavenCentral()
+}
+
+//(2)
+dependencies {
+    // H2
+    implementation 'com.h2database:h2'
+
+    // Flyway
+    implementation 'org.flywaydb:flyway-core'
+
+    // JOOQ
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    jooqRuntime 'com.h2database:h2'
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // JUnit
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+//(3)
+flyway {
+    url = 'jdbc:h2:file:~/demodb'
+    user = 'sa'
+    password = 'sa'
+    schemas = ['public']
+    locations = ["filesystem:$project.projectDir/src/main/resources/db/migration"]
+}
+
+//(4)
+jooq {
+    demo(sourceSets.main) {
+        jdbc {
+            driver = 'org.h2.Driver'
+            url = 'jdbc:h2:file:~/demodb'
+            user = 'sa'
+            password = 'sa'
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            strategy {
+                name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+            }
+            database {
+                name = 'org.jooq.meta.h2.H2Database'
+                includes = 'public.*'
+                excludes = ''
+            }
+            generate {
+                records = true
+                fluentSetters = true
+            }
+            target {
+                packageName = 'com._98elements.jooq.spring.transactions.persistence'
+                directory = 'src/main/jooq'
+            }
+        }
+    }
+}
+
+sourceSets.main.java.srcDirs += "${projectDir}/src/main/jooq"
+clean.doFirst {
+    delete "${projectDir}/src/main/jooq"
+}
+
+//(5)
+compileJava.dependsOn generateDemoJooqSchemaSource
+generateDemoJooqSchemaSource.dependsOn flywayMigrate

@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:~/demodb
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+
+logging:
+  level:
+    root: INFO
+    org.jooq.tools.LoggerListener: DEBUG
+    org.springframework.transaction.interceptor: TRACE
