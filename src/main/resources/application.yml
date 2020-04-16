@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:file:~/demodb
-    username: sa
-    password: sa
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
 
 logging:
   level:
