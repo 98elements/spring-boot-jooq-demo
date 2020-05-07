@@ -1,11 +1,11 @@
-package com._98elements.jooq.spring.transactions;
+package com._98elements.jooq.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.IllegalTransactionStateException;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class JooqSpringTransactionMandatoryTest extends JooqSpringTransactionDemoTest {
+class JooqSpringTransactionMandatoryTest extends JooqSpringTransactionTest {
 
   @Test
   void thatTransactionIsMandatory() {

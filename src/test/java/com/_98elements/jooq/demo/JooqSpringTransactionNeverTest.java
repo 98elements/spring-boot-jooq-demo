@@ -1,4 +1,4 @@
-package com._98elements.jooq.spring.transactions;
+package com._98elements.jooq.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataAccessException;
@@ -7,7 +7,7 @@ import org.springframework.transaction.IllegalTransactionStateException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class JooqSpringTransactionNeverTest extends JooqSpringTransactionDemoTest {
+class JooqSpringTransactionNeverTest extends JooqSpringTransactionTest {
 
   @Test
   void thatTransactionIsNotCreated() {
@@ -16,8 +16,8 @@ class JooqSpringTransactionNeverTest extends JooqSpringTransactionDemoTest {
     assertThatThrownBy(
       () -> transactionalRunner.doInTransactionNever(
         () -> {
-          bookRepository.insert(1, "some tittle");
-          bookRepository.insert(1, "same tittle"); // will throw Exception
+          bookRepository.insert(someBook(1));
+          bookRepository.insert(someBook(1)); // will throw Exception
         })
     ).isInstanceOf(DataAccessException.class);
 

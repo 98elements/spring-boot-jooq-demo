@@ -1,13 +1,12 @@
-package com._98elements.jooq.spring.transactions;
+package com._98elements.jooq.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JooqSpringTransactionDemo {
-
+public class JooqDemoApplication {
 
   public static void main(final String[] args) {
-    SpringApplication.run(JooqSpringTransactionDemo.class);
+    SpringApplication.run(JooqDemoApplication.class);
   }
 }

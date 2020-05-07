@@ -1,4 +1,4 @@
-package com._98elements.jooq.spring.transactions;
+package com._98elements.jooq.demo;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;

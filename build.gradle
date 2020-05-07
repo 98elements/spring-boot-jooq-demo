@@ -1,6 +1,6 @@
 //(1)
 plugins {
-    id 'org.springframework.boot' version "2.2.5.RELEASE"
+    id 'org.springframework.boot' version "2.2.6.RELEASE"
     id 'nu.studer.jooq' version '4.1'
 }
 
@@ -10,7 +10,14 @@ apply plugin: 'io.spring.dependency-management'
 group 'com._98elements'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_13
+sourceCompatibility = JavaVersion.VERSION_14
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += '--enable-preview'
+}
+tasks.withType(Test) {
+    jvmArgs += "--enable-preview"
+}
 
 repositories {
     mavenCentral()
@@ -54,14 +61,13 @@ jooq {
             database {
                 name = 'org.jooq.meta.postgres.PostgresDatabase'
                 includes = 'public.*'
-                excludes = ''
             }
             generate {
                 records = true
                 fluentSetters = true
             }
             target {
-                packageName = 'com._98elements.jooq.spring.transactions.persistence'
+                packageName = 'com._98elements.jooq.demo.persistence'
                 directory = 'src/main/jooq'
             }
         }

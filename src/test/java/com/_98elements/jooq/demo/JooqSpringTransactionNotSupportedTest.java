@@ -1,13 +1,12 @@
-package com._98elements.jooq.spring.transactions;
+package com._98elements.jooq.demo;
 
-import com._98elements.jooq.spring.transactions.persistence.public_.tables.records.BooksRecord;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataAccessException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class JooqSpringTransactionNotSupportedTest extends JooqSpringTransactionDemoTest {
+class JooqSpringTransactionNotSupportedTest extends JooqSpringTransactionTest {
 
   @Test
   void thatTransactionIsNotCreated() {
@@ -16,8 +15,8 @@ class JooqSpringTransactionNotSupportedTest extends JooqSpringTransactionDemoTes
     assertThatThrownBy(
       () -> transactionalRunner.doInTransactionNotSupported(
         () -> {
-          bookRepository.insert(1, "some tittle");
-          bookRepository.insert(1, "same tittle"); // will throw Exception
+          bookRepository.insert(someBook(1));
+          bookRepository.insert(someBook(1)); // will throw Exception
         })
     ).isInstanceOf(DataAccessException.class);
 
@@ -31,15 +30,15 @@ class JooqSpringTransactionNotSupportedTest extends JooqSpringTransactionDemoTes
     assertThatThrownBy(
       () -> transactionalRunner.doInTransaction(
         () -> {
-          bookRepository.insert(1, "some tittle");
+          bookRepository.insert(someBook(1));
           transactionalRunner.doInTransactionNotSupported(
-            () -> bookRepository.insert(2, "some tittle")
+            () -> bookRepository.insert(someBook(2))
           );
-          bookRepository.insert(2, "same tittle"); // will throw Exception
+          bookRepository.insert(someBook(2)); // will throw Exception
         })
     ).isInstanceOf(DataAccessException.class);
 
     assertThat(bookRepository.getBooks().size()).isOne();
-    assertThat(bookRepository.getBooks()).containsExactly(new BooksRecord(2, "some tittle"));
+    //assertThat(bookRepository.getBooks()).containsExactly(new BooksRecord(2, "si-fi", "some tittle"));
   }
 }
